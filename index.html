@@ -246,6 +246,29 @@
             opacity: 0;
         }
 
+        /* =============================================
+           O QUE FAZEMOS - DRAG/SWIPE NO MOBILE
+           ============================================= */
+        @media (max-width: 1023px) {
+            #oqf-track-outer {
+                overflow-x: auto !important;
+                overflow-y: hidden !important;
+                cursor: grab;
+            }
+            #oqf-track-outer:active { cursor: grabbing; }
+            #oqf-track-outer .carousel-track {
+                animation: none !important;
+                scroll-snap-type: x proximity;
+            }
+            /* Esconde o bloco duplicado (só serve para o loop CSS no desktop) */
+            #oqf-track-outer .carousel-track > div:last-child {
+                display: none !important;
+            }
+            #oqf-track-outer .carousel-track .w-\[85vw\] {
+                scroll-snap-align: start;
+            }
+        }
+
         /* FAQ details styling */
         details > summary { list-style: none; }
         details > summary::-webkit-details-marker { display: none; }
@@ -259,29 +282,29 @@
         }
 
         /* =============================================
-           MOBILE PHONES - SCROLL HORIZONTAL
+           MOBILE PHONES - SCROLL HORIZONTAL (2-3 por vez)
            ============================================= */
         @media (max-width: 1023px) {
             .phones-mobile-outer {
                 overflow-x: auto !important;
-                overflow-y: visible !important;
+                overflow-y: hidden !important;
                 height: auto !important;
-                padding: 24px 20px 40px !important;
+                padding: 12px 16px 28px !important;
                 -webkit-overflow-scrolling: touch;
-                scroll-snap-type: x mandatory;
+                scroll-snap-type: x proximity;
             }
             .phones-mobile-inner {
                 position: relative !important;
                 display: flex !important;
                 flex-direction: row !important;
                 align-items: flex-start !important;
-                gap: 20px !important;
+                gap: 10px !important;
                 transform: none !important;
                 width: max-content !important;
                 max-width: none !important;
                 height: auto !important;
                 margin-top: 0 !important;
-                padding: 10px 0 20px !important;
+                padding: 0 !important;
             }
             .phones-mobile-inner .phone-1,
             .phones-mobile-inner .phone-2,
@@ -292,19 +315,24 @@
                 left: auto !important;
                 right: auto !important;
                 top: auto !important;
-                transform: scale(0.78) !important;
-                transform-origin: top center !important;
+                width: 152px !important;
+                height: 310px !important;
+                overflow: hidden !important;
+                border-radius: 21px !important;
                 flex-shrink: 0 !important;
-                scroll-snap-align: center;
-                margin-bottom: -120px !important;
+                margin-bottom: 0 !important;
+                scroll-snap-align: start;
             }
-            .phones-mobile-inner .phone-1:hover,
-            .phones-mobile-inner .phone-2:hover,
-            .phones-mobile-inner .phone-3:hover,
-            .phones-mobile-inner .phone-4:hover,
-            .phones-mobile-inner .phone-5:hover {
-                transform: scale(0.82) translateY(-10px) !important;
-                z-index: 10 !important;
+            /* Escala o wrapper interno (perspective div) para caber no slot */
+            .phones-mobile-inner .phone-1 > div,
+            .phones-mobile-inner .phone-2 > div,
+            .phones-mobile-inner .phone-3 > div,
+            .phones-mobile-inner .phone-4 > div,
+            .phones-mobile-inner .phone-5 > div {
+                transform: scale(0.585) !important;
+                transform-origin: top left !important;
+                width: 260px !important;
+                height: 530px !important;
             }
         }
     </style>
@@ -405,6 +433,7 @@
                 <!-- Text/Copy Left Side -->
                 <div class="w-full lg:w-1/2 flex flex-col justify-center pointer-events-auto py-12 lg:py-0 relative">
                     <!-- Fundo em gradiente suave apenas por trás do texto para garantir leitura -->
+                    <div class="absolute -inset-10 bg-white/70 backdrop-blur-sm rounded-3xl z-[-1] lg:hidden"></div>
                     <div class="absolute -inset-10 bg-radial-gradient from-white via-white/80 to-transparent blur-2xl z-[-1] hidden lg:block"></div>
                     
                     <div class="inline-flex items-center gap-3 px-4 py-2 bg-gray-100 border border-gray-200 rounded-full w-max mb-6 reveal-on-scroll">
@@ -412,8 +441,10 @@
                         <span class="text-[10px] sm:text-xs font-bold text-gray-700 tracking-wider uppercase">Tecnologia Sintética PIXT</span>
                     </div>
 
-                    <h1 class="text-4xl sm:text-5xl lg:text-[4.5rem] leading-[1.1] font-display font-black text-gray-900 mb-6 reveal-on-scroll" style="transition-delay: 100ms;">
-                        O processo <br> que seu negócio <br> <span class="text-brand-dark bg-brand/20 px-2 rounded-lg">precisa.</span>
+                    <h1 class="text-4xl sm:text-5xl lg:text-[4.5rem] leading-[1.1] font-display font-black mb-6 reveal-on-scroll" style="transition-delay: 100ms;">
+                        <span class="text-brand-dark">O processo</span><br>
+                        <span class="text-gray-900">que seu negócio</span><br>
+                        <span class="bg-brand text-black px-3 py-1 rounded-xl inline-block shadow-[0_8px_24px_rgba(198,244,50,0.45)] mt-1">precisa.</span>
                     </h1>
                     
                     <p class="text-base sm:text-lg md:text-xl text-gray-600 mb-10 max-w-lg leading-relaxed font-medium reveal-on-scroll" style="transition-delay: 200ms;">
@@ -706,7 +737,7 @@
 
             <!-- Seamless Continuous Carousel Wrapper -->
             <!-- Os 15 Itens duplicados para criar o efeito infinito -->
-            <div class="w-full relative z-10 py-6 reveal-on-scroll overflow-hidden group" style="transition-delay: 200ms;">
+            <div id="oqf-track-outer" class="w-full relative z-10 py-6 reveal-on-scroll overflow-hidden group" style="transition-delay: 200ms;">
                 <div class="carousel-track">
                     
                     <!-- Bloco Original dos 15 itens -->
@@ -1029,10 +1060,9 @@
         </section>
 
         <!-- 4. SECÇÃO: NOSSA TECNOLOGIA (Zoom Automático) -->
-        <section id="tecnologia-zoom" class="relative w-full h-[100vh] bg-gray-50 overflow-hidden flex flex-col items-center justify-center z-50 border-t border-gray-200">
-            
-            <!-- Conteúdo Real (Atrás da Máscara) -->
-            <div id="tecnologia-content" class="absolute inset-0 w-full h-full flex flex-col bg-gray-50 pt-[12vh] zoom-content-auto z-10">
+        <section id="tecnologia-zoom" class="relative w-full bg-gray-50 overflow-hidden flex flex-col items-center justify-center z-50 border-t border-gray-200 py-24 md:py-32">
+
+            <div id="tecnologia-content" class="w-full flex flex-col bg-gray-50 z-10">
                 
                 <!-- LINHAS DE FUNDO CONTÍNUAS (SVGs) -->
                 <svg class="absolute top-[-25%] left-0 w-full h-[150%] text-black opacity-[0.04] pointer-events-none z-0 select-none transform scale-y-[-1]" viewBox="0 0 800 800" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
@@ -1062,26 +1092,6 @@
                 </div>
             </div>
 
-            <!-- MÁSCARA DE ZOOM -->
-            <div id="tech-mask-wrapper" class="absolute inset-0 w-full h-full flex items-center justify-center zoom-mask-auto z-[60] bg-white">
-                <svg viewBox="0 0 1000 600" class="w-full h-full min-w-[1200px]" preserveAspectRatio="xMidYMid slice">
-                    <defs>
-                        <mask id="techTextMask">
-                            <rect width="100%" height="100%" fill="white" />
-                            <text x="50%" y="38%" text-anchor="middle" dominant-baseline="central" font-family="'Syncopate', sans-serif" font-weight="700" font-size="80" fill="black" letter-spacing="-2">NOSSA</text>
-                            <text x="50%" y="62%" text-anchor="middle" dominant-baseline="central" font-family="'Syncopate', sans-serif" font-weight="700" font-size="70" fill="black" letter-spacing="-2">TECNOLOGIA</text>
-                        </mask>
-                    </defs>
-                    <g mask="url(#techTextMask)">
-                        <rect width="100%" height="100%" fill="#ffffff" />
-                        <!-- Grid visual sutil na máscara para charme -->
-                        <path d="M 0 0 L 1000 600 M 1000 0 L 0 600" stroke="#f3f4f6" stroke-width="2" fill="none" opacity="0.5"/>
-                    </g>
-                    <!-- Textos pretos que somem no zoom -->
-                    <text class="zoom-text-black" x="50%" y="38%" text-anchor="middle" dominant-baseline="central" font-family="'Syncopate', sans-serif" font-weight="700" font-size="80" fill="#111827" letter-spacing="-2">NOSSA</text>
-                    <text class="zoom-text-black" x="50%" y="62%" text-anchor="middle" dominant-baseline="central" font-family="'Syncopate', sans-serif" font-weight="700" font-size="70" fill="#111827" letter-spacing="-2">TECNOLOGIA</text>
-                </svg>
-            </div>
         </section>
 
         <!-- 2.6 Secção Restabelecida: Metodologia (Stacked Cards) -->
@@ -1262,8 +1272,8 @@
         </section>
 
         <!-- 6. QUEM SOMOS (Zoom Automático + Repulsão de Logos) -->
-        <section id="quem-somos-zoom" class="relative w-full h-[100vh] bg-white overflow-hidden flex flex-col items-center justify-center z-50 border-t border-gray-200">
-            
+        <section id="quem-somos-zoom" class="relative w-full min-h-screen bg-white overflow-hidden flex flex-col items-center justify-center z-50 border-t border-gray-200 py-20 md:py-28">
+
             <!-- Efeito de Repulsão Flutuante (Background) -->
             <div id="repulsion-container" class="absolute inset-0 pointer-events-none z-0 overflow-hidden">
                 <div class="fp-logo-card fp-fa" style="top:15%;left:10%;"><div class="fp-logo-inner"><img src="pxtlogo3.png" onerror="this.src='https://via.placeholder.com/150x50?text=PIXT';"></div></div>
@@ -1275,16 +1285,15 @@
                 <div class="fp-logo-card fp-fb" style="top:15%;right:30%;"><div class="fp-logo-inner"><img src="logo 2 colorido (1).png" onerror="this.src='https://via.placeholder.com/50x50?text=L2C';"></div></div>
             </div>
 
-            <!-- Conteúdo Real (Atrás da Máscara) -->
-            <div id="qs-content-container" class="absolute inset-0 w-full h-full flex flex-col bg-transparent zoom-content-auto z-10 overflow-y-auto no-scrollbar py-20">
+            <div id="qs-content-container" class="relative w-full flex flex-col bg-transparent z-10">
                 <!-- LINHAS DE FUNDO CONTÍNUAS (SVGs) -->
                 <svg class="absolute top-[-25%] left-0 w-full h-[150%] text-black opacity-[0.03] pointer-events-none z-0 select-none transform scale-y-[-1] scale-x-[-1]" viewBox="0 0 800 800" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
                     <path d="M -100 200 C 200 400 300 -50 500 200 S 700 600 1000 400" stroke="currentColor" stroke-width="80" fill="none" stroke-linecap="round"/>
                     <path d="M -50 600 C 250 800 450 300 700 600 S 900 900 1100 700" stroke="currentColor" stroke-width="120" fill="none" stroke-linecap="round"/>
                 </svg>
 
-                <div class="container mx-auto px-6 max-w-7xl relative z-10 h-full flex flex-col justify-center mt-10 lg:mt-0">
-                    <div class="flex flex-col lg:flex-row items-center gap-8 lg:gap-20 my-auto bg-white/60 backdrop-blur-sm p-6 lg:p-10 rounded-[2rem] sm:rounded-[3rem] border border-white/50 shadow-sm">
+                <div class="container mx-auto px-6 max-w-7xl relative z-10">
+                    <div class="flex flex-col lg:flex-row items-center gap-8 lg:gap-20 bg-white/60 backdrop-blur-sm p-6 lg:p-10 rounded-[2rem] sm:rounded-[3rem] border border-white/50 shadow-sm">
                         
                         <!-- Left: Foto/Logo PIXT -->
                         <div class="w-full lg:w-5/12 flex justify-center lg:justify-start shrink-0">
@@ -1305,16 +1314,12 @@
                                 A engrenagem por trás da <span class="text-brand-dark">evolução.</span>
                             </h3>
                             
-                            <div class="space-y-4 sm:space-y-5 text-gray-700 text-sm md:text-base leading-relaxed max-h-[40vh] sm:max-h-[50vh] overflow-y-auto pr-4 no-scrollbar">
+                            <div class="space-y-4 sm:space-y-5 text-gray-700 text-sm md:text-base leading-relaxed">
                                 <p><strong>A Pixt é uma empresa de tecnologia fundada por três especialistas que unem visão estratégica, técnica e criativa:</strong> Caio César (CTO), Wallace Ferreira (CRO) e Paulo Cesar (Diretor Criativo).</p>
                                 
                                 <p>Nascemos com um propósito claro: facilitar a escala das empresas por meio de agentes de IA personalizados, desenvolvidos de acordo com os gargalos e desafios específicos de cada operação.</p>
 
                                 <p>Viemos de anos de experiência dentro do marketing. Ao atender milhares de clientes, identificamos um gargalo em comum que limitava o crescimento das empresas: <strong>falhas no operacional</strong>. Perdas no tempo de resposta para leads qualificados, baixa padronização na qualidade da operação e desorganização de dados faziam com que oportunidades reais fossem desperdiçadas.</p>
-
-                                <div class="pl-4 sm:pl-5 border-l-[3px] border-brand py-2 sm:py-3 my-4 sm:my-6 bg-gray-100 rounded-r-xl">
-                                    <p class="text-gray-900 font-medium italic text-base sm:text-lg">"Empresas grandes tomam decisões baseadas em dados, não em achismo — e foi justamente para resolver esse problema que criamos a Pixt."</p>
-                                </div>
 
                                 <p>Já ajudamos mais de 100 empresas a reduzir custos operacionais, diminuir drasticamente o tempo de resposta e fortalecer o setor comercial com uma qualificação de leads mais inteligente — aumentando a margem de contribuição e a eficiência das operações.</p>
                                 
@@ -1330,25 +1335,6 @@
                 </div>
             </div>
 
-            <!-- MÁSCARA DE ZOOM -->
-            <div id="qs-mask-wrapper" class="absolute inset-0 w-full h-full flex items-center justify-center zoom-mask-auto z-[60] bg-gray-50">
-                <svg viewBox="0 0 1000 600" class="w-full h-full min-w-[1200px]" preserveAspectRatio="xMidYMid slice">
-                    <defs>
-                        <mask id="qsTextMask">
-                            <rect width="100%" height="100%" fill="white" />
-                            <text x="50%" y="38%" text-anchor="middle" dominant-baseline="central" font-family="'Syncopate', sans-serif" font-weight="700" font-size="95" fill="black" letter-spacing="-2">QUEM</text>
-                            <text x="50%" y="62%" text-anchor="middle" dominant-baseline="central" font-family="'Syncopate', sans-serif" font-weight="700" font-size="95" fill="black" letter-spacing="-2">SOMOS</text>
-                        </mask>
-                    </defs>
-                    <g mask="url(#qsTextMask)">
-                        <rect width="100%" height="100%" fill="#ffffff" />
-                        <path d="M 0 0 L 1000 600 M 1000 0 L 0 600" stroke="#f3f4f6" stroke-width="2" fill="none" opacity="0.5"/>
-                    </g>
-                    <!-- Textos pretos que somem no zoom -->
-                    <text class="zoom-text-black" x="50%" y="38%" text-anchor="middle" dominant-baseline="central" font-family="'Syncopate', sans-serif" font-weight="700" font-size="95" fill="#111827" letter-spacing="-2">QUEM</text>
-                    <text class="zoom-text-black" x="50%" y="62%" text-anchor="middle" dominant-baseline="central" font-family="'Syncopate', sans-serif" font-weight="700" font-size="95" fill="#111827" letter-spacing="-2">SOMOS</text>
-                </svg>
-            </div>
         </section>
 
         <!-- 7. NOVA SECÇÃO: FIT / TARGET AUDIENCE -->
@@ -1487,33 +1473,34 @@
                     </div>
 
                     <div class="w-full md:w-1/2 bg-gray-50 p-6 sm:p-8 rounded-[1.5rem] sm:rounded-[2rem] shadow-inner border border-gray-200">
-                         <form id="contact-form" class="space-y-4" onsubmit="event.preventDefault(); document.getElementById('form-success-message').classList.remove('hidden'); this.reset();">
+                             <form id="contact-form" class="space-y-4" onsubmit="handleFormSubmit(event)">
                             <div>
                                 <label class="block text-xs font-bold text-gray-500 mb-1.5 uppercase tracking-wide">Nome</label>
-                                <input type="text" class="w-full bg-white border border-gray-200 rounded-xl p-3.5 text-gray-900 focus:border-brand focus:ring-1 focus:ring-brand focus:outline-none transition-all placeholder-gray-400 shadow-sm" placeholder="O seu Nome" required />
+                                <input id="field-nome" type="text" class="w-full bg-white border border-gray-200 rounded-xl p-3.5 text-gray-900 focus:border-brand focus:ring-1 focus:ring-brand focus:outline-none transition-all placeholder-gray-400 shadow-sm" placeholder="O seu Nome" required />
                             </div>
                             <div>
                                 <label class="block text-xs font-bold text-gray-500 mb-1.5 uppercase tracking-wide">Email Corporativo</label>
-                                <input type="email" class="w-full bg-white border border-gray-200 rounded-xl p-3.5 text-gray-900 focus:border-brand focus:ring-1 focus:ring-brand focus:outline-none transition-all placeholder-gray-400 shadow-sm" placeholder="email@empresa.com" required />
+                                <input id="field-email" type="email" class="w-full bg-white border border-gray-200 rounded-xl p-3.5 text-gray-900 focus:border-brand focus:ring-1 focus:ring-brand focus:outline-none transition-all placeholder-gray-400 shadow-sm" placeholder="email@empresa.com" required />
                             </div>
                             <div class="flex flex-col sm:flex-row gap-4">
                                 <div class="w-full sm:w-1/2">
                                     <label class="block text-xs font-bold text-gray-500 mb-1.5 uppercase tracking-wide">WhatsApp</label>
-                                    <input type="tel" class="w-full bg-white border border-gray-200 rounded-xl p-3.5 text-gray-900 focus:border-brand focus:ring-1 focus:ring-brand focus:outline-none transition-all placeholder-gray-400 shadow-sm" placeholder="(00) 00000-0000" required />
+                                    <input id="field-whatsapp" type="tel" class="w-full bg-white border border-gray-200 rounded-xl p-3.5 text-gray-900 focus:border-brand focus:ring-1 focus:ring-brand focus:outline-none transition-all placeholder-gray-400 shadow-sm" placeholder="(00) 00000-0000" required />
+                                    <p id="phone-error" class="hidden mt-1 text-xs text-red-500 font-semibold">Informe DDD + número (11 dígitos no total).</p>
                                 </div>
                                 <div class="w-full sm:w-1/2">
-                                    <label class="block text-xs font-bold text-gray-500 mb-1.5 uppercase tracking-wide">CNPJ</label>
-                                    <input type="text" class="w-full bg-white border border-gray-200 rounded-xl p-3.5 text-gray-900 focus:border-brand focus:ring-1 focus:ring-brand focus:outline-none transition-all placeholder-gray-400 shadow-sm" placeholder="00.000.000/0000-00" required />
+                                    <label class="block text-xs font-bold text-gray-500 mb-1.5 uppercase tracking-wide">Nome da Empresa</label>
+                                    <input id="field-empresa" type="text" class="w-full bg-white border border-gray-200 rounded-xl p-3.5 text-gray-900 focus:border-brand focus:ring-1 focus:ring-brand focus:outline-none transition-all placeholder-gray-400 shadow-sm" placeholder="Sua Empresa Ltda." required />
                                 </div>
                             </div>
-                            
-                            <button type="submit" class="w-full py-3.5 sm:py-4 mt-4 bg-gray-900 hover:bg-black text-white font-bold text-base sm:text-lg rounded-xl transition-all shadow-md flex items-center justify-center gap-2">
+
+                            <button id="form-submit-btn" type="submit" class="w-full py-3.5 sm:py-4 mt-4 bg-gray-900 hover:bg-black text-white font-bold text-base sm:text-lg rounded-xl transition-all shadow-md flex items-center justify-center gap-2">
                                 Solicitar Diagnóstico
                                 <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
                             </button>
 
-                            <div id="form-success-message" class="hidden mt-4 p-4 bg-[#c6f432]/20 text-[#85a815] text-center text-sm font-bold rounded-xl border border-[#c6f432]/50 transition-all fade-in-up">
-                                Protocolo Iniciado! <br> Em breve a nossa equipe entrará em contato.
+                            <div id="form-error-message" class="hidden mt-4 p-4 bg-red-50 text-red-600 text-center text-sm font-bold rounded-xl border border-red-200">
+                                Ocorreu um erro. Tente novamente.
                             </div>
                          </form>
                     </div>
@@ -1816,8 +1803,7 @@
             zoomObserver.observe(section);
         }
 
-        initAutoZoom('tecnologia-zoom', 'tech-mask-wrapper', 'tecnologia-content');
-        initAutoZoom('quem-somos-zoom', 'qs-mask-wrapper', 'qs-content-container');
+        // Zoom effects removed — sections are now static
 
         // ==========================================
         // COMPONENTE DE CARDS EM CASCATA (TECNOLOGIA)
@@ -2221,6 +2207,104 @@
             camera.updateProjectionMatrix();
         });
     })();
+    </script>
+
+    <script>
+        // =============================================
+        // WEBHOOK URL — altere para a sua URL
+        // =============================================
+        var PIXT_WEBHOOK_URL = 'https://seu-webhook-aqui.com/leads'; // ← substitua aqui
+
+        // =============================================
+        // FORMULÁRIO: validação + webhook + redirect
+        // =============================================
+        function handleFormSubmit(event) {
+            event.preventDefault();
+
+            var nome     = document.getElementById('field-nome').value.trim();
+            var email    = document.getElementById('field-email').value.trim();
+            var whatsapp = document.getElementById('field-whatsapp').value.trim();
+            var empresa  = document.getElementById('field-empresa').value.trim();
+            var phoneErr = document.getElementById('phone-error');
+            var formErr  = document.getElementById('form-error-message');
+            var btn      = document.getElementById('form-submit-btn');
+
+            // Valida celular: exatamente 11 dígitos numéricos
+            var digits = whatsapp.replace(/\D/g, '');
+            if (digits.length !== 11) {
+                phoneErr.classList.remove('hidden');
+                document.getElementById('field-whatsapp').focus();
+                return;
+            }
+            phoneErr.classList.add('hidden');
+            formErr.classList.add('hidden');
+
+            // Feedback visual de envio
+            btn.disabled = true;
+            btn.textContent = 'Enviando...';
+
+            var payload = { nome: nome, email: email, whatsapp: digits, empresa: empresa, origem: 'landing-page', data: new Date().toISOString() };
+
+            fetch(PIXT_WEBHOOK_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            })
+            .then(function(res) {
+                // Redireciona independente do status HTTP (o webhook pode retornar 200 ou outro)
+                window.location.href = 'obrigado.html';
+            })
+            .catch(function() {
+                // Mesmo com erro de rede, redireciona (dados podem ter chegado)
+                window.location.href = 'obrigado.html';
+            });
+        }
+
+        // Máscara de telefone: aceita apenas dígitos e formata automaticamente
+        (function() {
+            var el = document.getElementById('field-whatsapp');
+            if (!el) return;
+            el.addEventListener('input', function() {
+                var v = this.value.replace(/\D/g, '').slice(0, 11);
+                if (v.length > 10) {
+                    this.value = '(' + v.slice(0,2) + ') ' + v.slice(2,7) + '-' + v.slice(7);
+                } else if (v.length > 6) {
+                    this.value = '(' + v.slice(0,2) + ') ' + v.slice(2,6) + '-' + v.slice(6);
+                } else if (v.length > 2) {
+                    this.value = '(' + v.slice(0,2) + ') ' + v.slice(2);
+                } else {
+                    this.value = v;
+                }
+                // Esconde erro ao digitar
+                document.getElementById('phone-error').classList.add('hidden');
+            });
+        })();
+
+        // =============================================
+        // O QUE FAZEMOS — drag/swipe no desktop também
+        // =============================================
+        (function() {
+            var outer = document.getElementById('oqf-track-outer');
+            if (!outer) return;
+            var isDown = false, startX, scrollLeft;
+
+            outer.addEventListener('mousedown', function(e) {
+                isDown = true;
+                outer.classList.add('[animation-play-state:paused]');
+                startX = e.pageX - outer.offsetLeft;
+                scrollLeft = outer.scrollLeft;
+                e.preventDefault();
+            });
+            outer.addEventListener('mouseleave', function() { isDown = false; });
+            outer.addEventListener('mouseup', function() { isDown = false; });
+            outer.addEventListener('mousemove', function(e) {
+                if (!isDown) return;
+                e.preventDefault();
+                var x = e.pageX - outer.offsetLeft;
+                var walk = (x - startX) * 1.5;
+                outer.scrollLeft = scrollLeft - walk;
+            });
+        })();
     </script>
 
 </body>
