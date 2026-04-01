@@ -1496,7 +1496,7 @@
                             <div class="flex flex-col sm:flex-row gap-4">
                                 <div class="w-full sm:w-1/2">
                                     <label class="block text-xs font-bold text-gray-500 mb-1.5 uppercase tracking-wide">WhatsApp</label>
-                                    <input id="field-whatsapp" type="tel" class="w-full bg-white border border-gray-200 rounded-xl p-3.5 text-gray-900 focus:border-brand focus:ring-1 focus:ring-brand focus:outline-none transition-all placeholder-gray-400 shadow-sm" placeholder="(00) 00000-0000" required />
+                                    <input id="field-whatsapp" type="tel" maxlength="15" class="w-full bg-white border border-gray-200 rounded-xl p-3.5 text-gray-900 focus:border-brand focus:ring-1 focus:ring-brand focus:outline-none transition-all placeholder-gray-400 shadow-sm" placeholder="(00) 00000-0000" required />
                                     <p id="phone-error" class="hidden mt-1 text-xs text-red-500 font-semibold">Informe DDD + número (11 dígitos no total).</p>
                                 </div>
                                 <div class="w-full sm:w-1/2">
@@ -2224,11 +2224,7 @@
         // =============================================
         // WEBHOOK URL — altere para a sua URL
         // =============================================
-<<<<<<< HEAD
         var PIXT_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbzRM_igaS-yLn5JsUrBmO8ClNDEuy7QFUEw4uq7DMU9xDjZtTEryR78-M-xLj4R_l60rw/exec';
-=======
-        var PIXT_WEBHOOK_URL = 'https://seu-webhook-aqui.com/leads'; // ← substitua aqui
->>>>>>> 636a1bbab2412a9b741ac6df7d8dd03eea140e18
 
         // =============================================
         // FORMULÁRIO: validação + webhook + redirect
@@ -2316,11 +2312,4 @@
                 if (!isDown) return;
                 e.preventDefault();
                 var x = e.pageX - outer.offsetLeft;
-                var walk = (x - startX) * 1.5;
-                outer.scrollLeft = scrollLeft - walk;
-            });
-        })();
-    </script>
-
-</body>
-</html>
+   
