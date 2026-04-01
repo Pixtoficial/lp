@@ -2312,4 +2312,11 @@
                 if (!isDown) return;
                 e.preventDefault();
                 var x = e.pageX - outer.offsetLeft;
-   
+                var walk = (x - startX) * 1.5;
+                outer.scrollLeft = scrollLeft - walk;
+            });
+        })();
+    </script>
+
+</body>
+</html>
